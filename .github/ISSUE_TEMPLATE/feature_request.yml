@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a focused improvement that fits Duplicate Hunter's verification-first file-safety model.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What workflow is difficult today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the user-visible behavior rather than only implementation details.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: File-safety considerations
+      description: Explain how the proposal keeps operations explicit, reviewable, and reversible where applicable.
+    validations:
+      required: true
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Project principles
+      options:
+        - label: The proposal does not require automatic deletion of detected duplicates.
+          required: true
+        - label: The proposal can be documented without presenting unimplemented behavior as current.
+          required: true

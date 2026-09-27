@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import hashlib
-import os
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 CHUNK_SIZE = 1024 * 1024
 

@@ -1,0 +1,69 @@
+name: Bug report
+description: Report reproducible behavior that does not match Duplicate Hunter's current documented behavior.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Remove personal paths and private filenames before posting.
+  - type: input
+    id: version
+    attributes:
+      label: Duplicate Hunter version
+      placeholder: "Example: 1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "Example: 3.12.5"
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or invocation
+      description: Redact usernames, private paths, and file names when needed.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: File-safety impact
+      description: Mention whether files were only scanned, previewed for quarantine, or moved with --apply.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I removed secrets and sensitive filesystem information.
+          required: true
+        - label: I checked that this is not a request for visual-similarity or archive-content detection.
+          required: true

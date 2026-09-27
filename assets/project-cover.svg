@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+  <title id="title">Duplicate Hunter project cover</title>
+  <desc id="desc">Precision file forensics identity for Duplicate Hunter by Radwan Abd alhady Ahmed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080C10"/>
+      <stop offset="0.55" stop-color="#0D141B"/>
+      <stop offset="1" stop-color="#101A22"/>
+    </linearGradient>
+    <linearGradient id="mintLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7CFFB2"/>
+      <stop offset="1" stop-color="#22D3C5"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15212B" stop-opacity=".98"/>
+      <stop offset="1" stop-color="#0C1319" stop-opacity=".98"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#7CFFB2" stop-opacity=".20"/>
+      <stop offset="1" stop-color="#7CFFB2" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#25313B" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="22" stdDeviation="28" flood-color="#000" flood-opacity=".45"/>
+    </filter>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="42"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="720" fill="url(#bg)"/>
+  <rect width="1600" height="720" fill="url(#grid)" opacity=".38"/>
+  <circle cx="1295" cy="190" r="320" fill="url(#glow)" filter="url(#soft)"/>
+  <circle cx="145" cy="690" r="220" fill="#22D3C5" opacity=".045"/>
+
+  <g opacity=".28">
+    <path d="M78 86H344" stroke="url(#mintLine)" stroke-width="2"/>
+    <path d="M78 94H215" stroke="#F2C14E" stroke-width="2"/>
+    <circle cx="78" cy="86" r="5" fill="#7CFFB2"/>
+  </g>
+
+  <g transform="translate(92 118)">
+    <rect x="0" y="0" width="232" height="38" rx="19" fill="#111A21" stroke="#2B3A44"/>
+    <circle cx="22" cy="19" r="5" fill="#7CFFB2"/>
+    <text x="40" y="25" fill="#9EB1BE" font-size="14" font-family="Inter,Segoe UI,Arial,sans-serif" font-weight="700" letter-spacing="2.2">LOCAL FILE FORENSICS</text>
+
+    <text x="0" y="118" fill="#F7FAFC" font-size="86" font-family="Inter,Segoe UI,Arial,sans-serif" font-weight="800" letter-spacing="-3">DUPLICATE</text>
+    <text x="0" y="202" fill="url(#mintLine)" font-size="86" font-family="Inter,Segoe UI,Arial,sans-serif" font-weight="800" letter-spacing="-3">HUNTER</text>
+
+    <text x="2" y="254" fill="#A9BAC5" font-size="24" font-family="Inter,Segoe UI,Arial,sans-serif">Exact duplicate discovery. Local. Verifiable. Reversible.</text>
+    <text x="2" y="292" fill="#6F8492" font-size="17" font-family="Inter,Segoe UI,Arial,sans-serif">Size → 64 KiB prefix digest → full SHA-256 confirmation</text>
+
+    <g transform="translate(0 342)" font-family="Inter,Segoe UI,Arial,sans-serif">
+      <g>
+        <rect width="164" height="44" rx="12" fill="#111B22" stroke="#294038"/>
+        <path d="M18 22l7 7 13-15" fill="none" stroke="#7CFFB2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="48" y="28" fill="#DCE7ED" font-size="15" font-weight="650">SHA-256 verified</text>
+      </g>
+      <g transform="translate(180 0)">
+        <rect width="150" height="44" rx="12" fill="#111B22" stroke="#294038"/>
+        <path d="M20 14v16M13 22h14" stroke="#22D3C5" stroke-width="2.5" stroke-linecap="round"/>
+        <text x="46" y="28" fill="#DCE7ED" font-size="15" font-weight="650">Preview first</text>
+      </g>
+      <g transform="translate(346 0)">
+        <rect width="132" height="44" rx="12" fill="#111B22" stroke="#4A3F22"/>
+        <circle cx="22" cy="22" r="8" fill="none" stroke="#F2C14E" stroke-width="2"/>
+        <path d="M17 22h10M22 17v10" stroke="#F2C14E" stroke-width="1.7"/>
+        <text x="45" y="28" fill="#DCE7ED" font-size="15" font-weight="650">Local only</text>
+      </g>
+    </g>
+
+    <g transform="translate(0 472)">
+      <text x="0" y="0" fill="#F7FAFC" font-size="24" font-family="Tahoma,Segoe UI,Arial,sans-serif" font-weight="700">رضوان عبدالهادي</text>
+      <text x="0" y="31" fill="#718592" font-size="15" font-family="Inter,Segoe UI,Arial,sans-serif" letter-spacing=".8">A RADWAN ABD ALHADY PROJECT</text>
+    </g>
+  </g>
+
+  <g transform="translate(930 104)" filter="url(#shadow)">
+    <rect x="72" y="94" width="410" height="416" rx="36" fill="#091016" stroke="#283A45" stroke-width="2"/>
+    <rect x="96" y="118" width="362" height="368" rx="26" fill="url(#panel)"/>
+
+    <g transform="translate(8 18)">
+      <path d="M112 82h210l62 62v256a26 26 0 0 1-26 26H112a26 26 0 0 1-26-26V108a26 26 0 0 1 26-26z" fill="#0B1319" stroke="#30414B" stroke-width="2"/>
+      <path d="M322 82v50a20 20 0 0 0 20 20h42" fill="#18252D" stroke="#30414B" stroke-width="2"/>
+      <rect x="122" y="194" width="180" height="10" rx="5" fill="#334550"/>
+      <rect x="122" y="222" width="218" height="10" rx="5" fill="#263843"/>
+      <rect x="122" y="250" width="152" height="10" rx="5" fill="#263843"/>
+      <rect x="122" y="304" width="220" height="44" rx="12" fill="#101E22" stroke="#2F5948"/>
+      <text x="142" y="332" fill="#7CFFB2" font-size="17" font-family="ui-monospace,SFMono-Regular,Consolas,monospace">a4f91c…  SHA-256</text>
+    </g>
+
+    <g transform="translate(114 0)">
+      <path d="M112 82h210l62 62v256a26 26 0 0 1-26 26H112a26 26 0 0 1-26-26V108a26 26 0 0 1 26-26z" fill="#111C23" stroke="#3A515C" stroke-width="2"/>
+      <path d="M322 82v50a20 20 0 0 0 20 20h42" fill="#1D2B34" stroke="#3A515C" stroke-width="2"/>
+      <rect x="122" y="194" width="180" height="10" rx="5" fill="#3A505B"/>
+      <rect x="122" y="222" width="218" height="10" rx="5" fill="#30444F"/>
+      <rect x="122" y="250" width="152" height="10" rx="5" fill="#30444F"/>
+      <rect x="122" y="304" width="220" height="44" rx="12" fill="#10201F" stroke="#3F7159"/>
+      <text x="142" y="332" fill="#7CFFB2" font-size="17" font-family="ui-monospace,SFMono-Regular,Consolas,monospace">a4f91c…  SHA-256</text>
+    </g>
+
+    <g transform="translate(84 392)">
+      <rect x="0" y="0" width="410" height="116" rx="24" fill="#10191F" stroke="#2B424A"/>
+      <circle cx="54" cy="58" r="25" fill="#122A26" stroke="#7CFFB2" stroke-width="2"/>
+      <path d="M43 58l8 8 16-18" fill="none" stroke="#7CFFB2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="96" y="51" fill="#F4F8FA" font-size="18" font-family="Inter,Segoe UI,Arial,sans-serif" font-weight="700">BYTE-IDENTICAL PAIR</text>
+      <text x="96" y="78" fill="#8297A3" font-size="14" font-family="Inter,Segoe UI,Arial,sans-serif">one copy kept · extras quarantined on request</text>
+      <rect x="360" y="20" width="30" height="76" rx="15" fill="#0C151A" stroke="#4A3F22"/>
+      <circle cx="375" cy="41" r="6" fill="#F2C14E"/>
+      <circle cx="375" cy="60" r="6" fill="#22D3C5"/>
+      <circle cx="375" cy="79" r="6" fill="#7CFFB2"/>
+    </g>
+  </g>
+
+  <g opacity=".7">
+    <path d="M1420 615h92" stroke="#31434D"/>
+    <circle cx="1518" cy="615" r="4" fill="#7CFFB2"/>
+    <text x="1290" y="622" fill="#5F7480" font-size="12" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" letter-spacing="1.4">VERIFY • PREVIEW • QUARANTINE</text>
+  </g>
+</svg>

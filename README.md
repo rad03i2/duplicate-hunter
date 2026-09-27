@@ -1,48 +1,108 @@
+<div align="center">
+
+<img src="assets/project-cover.svg" alt="Duplicate Hunter — precision duplicate-file discovery by Radwan Abd alhady Ahmed" width="100%" />
+
+<br/>
+
+<img src="assets/project-logo.svg" alt="Duplicate Hunter logo" width="112" />
+
 # Duplicate Hunter
 
-**Safe, local duplicate-file discovery for Windows, macOS, and Linux.**
+**Find byte-identical files with a verification-first workflow — then report or quarantine them without automatic deletion.**
 
-Duplicate Hunter finds files that are truly byte-identical, estimates recoverable disk space, produces JSON reports, and can move redundant copies into a reversible quarantine folder. It never decides duplicates by filename alone and never auto-deletes files.
+<br/>
 
-> Author: **Radwan Abdulhadi Ahmed — رضوان عبدالهادي أحمد — [@rad03i2](https://github.com/rad03i2)**
+[![CI](https://github.com/rad03i2/duplicate-hunter/actions/workflows/ci.yml/badge.svg)](https://github.com/rad03i2/duplicate-hunter/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-7CFFB2?logo=python&logoColor=0B0F14)
+![Version](https://img.shields.io/badge/version-1.0.0-22D3C5)
+![License](https://img.shields.io/badge/license-MIT-EAF2F8)
+![Privacy](https://img.shields.io/badge/network-none-F2C14E)
+![Safety](https://img.shields.io/badge/default-preview--only-7CFFB2)
 
-## Why it exists
+**[English guide](README_EN.md) · [الدليل العربي](README_AR.md) · [Architecture](docs/ARCHITECTURE.md) · [Brand](docs/BRAND.md) · [Security](SECURITY.md)**
 
-Large download, photo, backup, and project folders often accumulate copies with different names. Deleting by name or size is unsafe. Duplicate Hunter narrows candidates by size and a fast prefix digest, then confirms duplicates with a full **SHA-256** hash.
+</div>
 
-## Features
+---
 
-- Exact duplicate detection using full SHA-256 verification.
-- Efficient size → prefix hash → full hash pipeline to avoid hashing every file in full.
-- Multiple files or directories in one scan; recursive scanning by default.
-- Hidden files excluded by default; symbolic links skipped for safer traversal.
-- `--min-size` filter for ignoring tiny files.
-- Recoverable-space calculation per group and overall.
-- JSON reports for automation and auditing.
-- Safe quarantine workflow: preview by default, explicit `--apply` required.
-- Keeps one copy from every group; moved copies get a manifest containing original/destination paths and hashes.
-- Collision-safe quarantine filenames.
-- No network access and no telemetry.
+> **No filename guessing. No cloud upload. No automatic deletion.**  
+> Duplicate Hunter confirms duplicates by content and keeps destructive behavior out of the default workflow.
 
-## Requirements & installation
+## What it does
 
-Python **3.10+**.
+Duplicate Hunter is a compact Python CLI for finding files that are truly byte-identical across one or more files or directories. It reduces unnecessary hashing with a staged pipeline, calculates reclaimable space, can export a JSON audit report, and can move redundant copies into a quarantine directory only after an explicit `--apply`.
+
+<table>
+<tr>
+<td width="25%"><strong>Content verified</strong><br/><sub>Full SHA-256 confirmation is required before files become a duplicate group.</sub></td>
+<td width="25%"><strong>Efficient scan</strong><br/><sub>Files are narrowed by size and a 64 KiB prefix digest before full hashing.</sub></td>
+<td width="25%"><strong>Safe action model</strong><br/><sub>Quarantine is preview-only unless <code>--apply</code> is supplied.</sub></td>
+<td width="25%"><strong>Local by design</strong><br/><sub>The application contains no network client, account flow, or telemetry path.</sub></td>
+</tr>
+</table>
+
+## Detection pipeline
+
+```text
+files / directories
+       │
+       ▼
+safe traversal
+(skip symlinks, unreadable entries,
+hidden entries by default)
+       │
+       ▼
+group by exact file size
+       │
+       ▼
+SHA-256 of first 64 KiB
+       │
+       ▼
+full SHA-256 verification
+       │
+       ▼
+byte-identical duplicate groups
+       │
+       ├── console summary
+       ├── JSON audit report
+       └── quarantine preview / explicit apply
+```
+
+The size and prefix stages are candidate filters only. A group is not reported as duplicate until the candidate files have the same full SHA-256 digest.
+
+## Current capability snapshot
+
+| Area | Supported now |
+|---|---|
+| Multiple input files/directories | Yes |
+| Recursive directory scanning | Yes, by default |
+| Non-recursive mode | Yes |
+| Hidden files | Excluded by default; opt in with `--include-hidden` |
+| Symbolic links | Skipped |
+| Hard-link double counting | Avoided during a scan through filesystem identity |
+| Minimum file size filter | Yes |
+| Full content confirmation | SHA-256 |
+| Recoverable-space estimate | Per group and total |
+| JSON report | Yes |
+| Quarantine preview | Yes |
+| Quarantine apply | Explicit `--apply` only |
+| Automatic deletion | **No** |
+| Automatic restore command | Not currently implemented |
+| Similar-image detection | Not implemented |
+| Archive inspection | Not implemented |
+
+## Quick start
+
+**Requirement:** Python 3.10 or newer.
 
 ```bash
 git clone https://github.com/rad03i2/duplicate-hunter.git
 cd duplicate-hunter
 python -m pip install -e .
-```
-
-## Usage
-
-Scan a directory:
-
-```bash
 duplicate-hunter ~/Downloads
 ```
 
-Scan several locations and ignore files below 1 MiB:
+Scan multiple locations and ignore files smaller than 1 MiB:
 
 ```bash
 duplicate-hunter ~/Downloads ~/Pictures --min-size 1048576
@@ -54,47 +114,48 @@ Create an audit report:
 duplicate-hunter ~/Pictures --json duplicate-report.json
 ```
 
-Preview which redundant copies would be quarantined:
+Preview a quarantine plan:
 
 ```bash
 duplicate-hunter ~/Pictures --quarantine ~/DuplicateQuarantine
 ```
 
-After reviewing the printed plan, perform the moves:
+Apply the reviewed plan:
 
 ```bash
 duplicate-hunter ~/Pictures --quarantine ~/DuplicateQuarantine --apply
 ```
 
-The quarantine directory receives `duplicate-hunter-manifest.json`. Duplicate Hunter **does not delete files**.
+When applied, extra copies are moved and a `duplicate-hunter-manifest.json` file records their source path, destination path, and SHA-256 digest. One file from each duplicate group is kept.
 
-Useful switches:
+## CLI options
 
 ```text
---no-recursive       only inspect the immediate directory
---include-hidden     include dot-files/dot-directories
---min-size BYTES     ignore smaller files
---json FILE          save a JSON report
---quarantine DIR     preview moving extra copies
+--no-recursive       inspect only the immediate directory
+--include-hidden     include hidden dot-files/directories
+--min-size BYTES     ignore files smaller than this size
+--json FILE          write a machine-readable JSON report
+--quarantine DIR     preview moving redundant copies
 --apply              perform the quarantine moves
 ```
 
-## Safety & privacy
+## Safety model
 
-All hashing happens locally. Paths and hashes leave the computer only if you choose to send the generated report elsewhere. Symbolic links are ignored. Files that cannot be read are skipped. Hard-linked files are de-duplicated by filesystem identity during a scan so the same underlying file is not falsely counted twice.
+Duplicate Hunter is intentionally conservative around user files:
 
-Before using `--apply`, keep backups of important data and inspect the preview. Quarantine is deliberately safer than deletion, but external changes during a scan (another program renaming/modifying files) can still affect results.
+- duplicate decisions are based on full content hashing, not names;
+- symbolic links are skipped;
+- unreadable files are skipped rather than treated as duplicates;
+- the same underlying hard-linked file is not counted twice during one scan;
+- quarantine is a move operation, not deletion;
+- action mode requires an explicit `--apply`;
+- automatic restore is not claimed — recovery is currently manual using the manifest.
 
-## Project structure
+For important data, keep a backup and review the preview before applying moves. Concurrent filesystem changes can still occur between discovery and action. See [SECURITY.md](SECURITY.md) for the exact safety boundary.
 
-```text
-src/duplicate_hunter/core.py   scanning, hashing, grouping
-src/duplicate_hunter/cli.py    CLI, JSON reporting, quarantine
-tests/                         functional tests
-.github/workflows/ci.yml       cross-platform lint/test matrix
-```
+## Tests and CI
 
-## Testing
+The repository includes behavioral tests for duplicate detection, hidden/minimum-size filtering, recursion, SHA-256 hashing, human-readable sizing, JSON reporting, preview-only quarantine, and applied quarantine with a manifest.
 
 ```bash
 python -m pip install -e . pytest ruff
@@ -102,97 +163,63 @@ ruff check src tests
 pytest
 ```
 
-CI is configured for Python 3.10, 3.12, and 3.13 on Linux, Windows, and macOS.
+GitHub Actions runs linting and tests on:
 
-## Limitations
+| OS | Python |
+|---|---|
+| Ubuntu | 3.10 · 3.12 · 3.13 |
+| Windows | 3.10 · 3.12 · 3.13 |
+| macOS | 3.10 · 3.12 · 3.13 |
 
-- Equality is content-based; metadata such as filename and timestamps is intentionally irrelevant.
-- SHA-256 confirmation requires reading candidate files, so very large duplicate sets can take time.
-- The tool does not inspect inside archives or compare visually similar images.
-- The quarantine manifest records moves; automatic restore is not currently implemented. Files can be restored manually using its source/destination paths.
+## Project layout
 
-## Contributing
+```text
+duplicate-hunter/
+├── assets/
+│   ├── project-cover.svg
+│   └── project-logo.svg
+├── docs/
+│   ├── ARCHITECTURE.md
+│   └── BRAND.md
+├── src/duplicate_hunter/
+│   ├── cli.py
+│   └── core.py
+├── tests/
+│   ├── test_cli.py
+│   └── test_core.py
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/ci.yml
+├── README_AR.md
+├── README_EN.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+└── LICENSE
+```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Security-sensitive reports should follow [SECURITY.md](SECURITY.md).
+## Documentation
 
-## License
-
-MIT License — see [LICENSE](LICENSE).
-
-## Author
-
-**Radwan Abdulhadi Ahmed**  
-**رضوان عبدالهادي أحمد**  
-GitHub: **[@rad03i2](https://github.com/rad03i2)**
+| Document | Purpose |
+|---|---|
+| [README_EN.md](README_EN.md) | Full English usage guide |
+| [README_AR.md](README_AR.md) | الدليل العربي الكامل |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Detection pipeline, components, and safety invariants |
+| [docs/BRAND.md](docs/BRAND.md) | Visual identity system and asset usage |
+| [SECURITY.md](SECURITY.md) | Filesystem safety and vulnerability reporting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution and validation workflow |
+| [CHANGELOG.md](CHANGELOG.md) | Notable repository changes |
+| [LICENSE](LICENSE) | MIT license |
 
 ---
 
-# العربية
+<div align="center">
 
-**Duplicate Hunter** أداة محلية وآمنة لاكتشاف الملفات المتطابقة فعليًا على ويندوز وماك ولينكس، وحساب المساحة التي يمكن استعادتها، وإنشاء تقارير JSON، ونقل النسخ الزائدة إلى مجلد عزل بدل حذفها.
+### Built by رضوان عبدالهادي
 
-## لماذا هذا المشروع؟
+**Radwan Abd alhady Ahmed · [@rad03i2](https://github.com/rad03i2)**
 
-قد تحتوي مجلدات التنزيلات والصور والنسخ الاحتياطية على نسخ متعددة بأسماء مختلفة. الاعتماد على الاسم أو الحجم وحده غير آمن، لذلك تجمع الأداة الملفات حسب الحجم أولًا، ثم تستخدم بصمة أولية سريعة، وبعدها تؤكد التطابق الكامل باستخدام **SHA-256**.
+<sub>Precision duplicate discovery with a local, verifiable, preview-first workflow.</sub>
 
-## المزايا
-
-- كشف التطابق الحقيقي بمقارنة المحتوى عبر SHA-256.
-- فحص عدة ملفات أو مجلدات دفعة واحدة مع البحث داخل المجلدات الفرعية افتراضيًا.
-- تجاهل الملفات المخفية والروابط الرمزية افتراضيًا لزيادة الأمان.
-- تحديد حد أدنى للحجم لتجاهل الملفات الصغيرة.
-- حساب المساحة القابلة للاستعادة لكل مجموعة وللفحص كاملًا.
-- إخراج تقرير JSON مناسب للأرشفة والأتمتة.
-- وضع عزل آمن: المعاينة هي الوضع الافتراضي، ولا يحدث النقل إلا مع `--apply`.
-- الاحتفاظ بنسخة واحدة من كل مجموعة وإنشاء manifest بمسارات الملفات وبصماتها.
-- لا اتصال بالشبكة ولا Telemetry.
-
-## التثبيت
-
-يتطلب Python 3.10 أو أحدث:
-
-```bash
-git clone https://github.com/rad03i2/duplicate-hunter.git
-cd duplicate-hunter
-python -m pip install -e .
-```
-
-## الاستخدام
-
-```bash
-duplicate-hunter ~/Downloads
-duplicate-hunter ~/Pictures --min-size 1048576
-duplicate-hunter ~/Pictures --json duplicate-report.json
-duplicate-hunter ~/Pictures --quarantine ~/DuplicateQuarantine
-duplicate-hunter ~/Pictures --quarantine ~/DuplicateQuarantine --apply
-```
-
-الأمر قبل الأخير يعرض ما سيحدث فقط. إضافة `--apply` تنفذ النقل. البرنامج **لا يحذف النسخ تلقائيًا**.
-
-## الخصوصية والأمان
-
-كل الحسابات تتم محليًا. لا تُرفع أسماء الملفات أو البصمات لأي خدمة. الروابط الرمزية تُتجاهل، والملفات غير القابلة للقراءة يتم تجاوزها. قبل تنفيذ النقل على بيانات مهمة يُنصح بوجود نسخة احتياطية ومراجعة المعاينة.
-
-## الاختبارات
-
-```bash
-python -m pip install -e . pytest ruff
-ruff check src tests
-pytest
-```
-
-تم إعداد GitHub Actions لاختبار المشروع على Linux وWindows وmacOS مع عدة إصدارات من Python.
-
-## القيود
-
-الأداة تبحث عن التطابق الكامل للمحتوى، وليست أداة للصور المتشابهة بصريًا ولا تفحص الملفات داخل الأرشيفات. قراءة الملفات الكبيرة اللازمة للتحقق الكامل قد تستغرق وقتًا. الاستعادة الآلية من مجلد العزل غير منفذة حاليًا، لكن ملف manifest يحتفظ بمسار المصدر والوجهة لتسهيل الاستعادة اليدوية.
-
-## المساهمة والترخيص
-
-راجع [CONTRIBUTING.md](CONTRIBUTING.md) للمساهمة و[SECURITY.md](SECURITY.md) للإبلاغ الأمني. المشروع مرخص وفق MIT، والتفاصيل في [LICENSE](LICENSE).
-
-## المؤلف
-
-**Radwan Abdulhadi Ahmed**  
-**رضوان عبدالهادي أحمد**  
-GitHub: **[@rad03i2](https://github.com/rad03i2)**
+</div>
